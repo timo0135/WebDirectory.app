@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:phone_book_app/models/entree.dart';
+import 'package:phone_book_app/screens/entree_preview.dart';
 
 class EntreeMaster extends StatefulWidget {
   const EntreeMaster({super.key});
@@ -133,31 +134,7 @@ class _EntreeMasterState extends State<EntreeMaster> {
                 itemCount: filteredEntrees.length,
                 itemBuilder: (context, index) {
                   final entree = filteredEntrees[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                      // ! Affichage des informations de l'entrée
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(entree.image),
-                        ),
-                        title: Text('${entree.nom} ${entree.prenom}'),
-                        subtitle: Text(entree.departement.join(', ')),
-                        trailing: const Icon(
-                          Icons.phone_outlined,
-                          color: Color.fromRGBO(3, 148, 222, 1),
-                        ),
-                      ),
-                    ),
-                  );
+                  return EntreePreview(entree: entree);
                 },
               ),
             );
