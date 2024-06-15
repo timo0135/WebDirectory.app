@@ -1,24 +1,52 @@
 class Entree {
-  // Attributs
-  String nom;
-  String prenom;
+  // ! Attributs
+  String nom, prenom, image;
+  String? id, fonction, numeroTel1, numeroTel2, email;
+  int? numeroBureau;
   List<String> departement;
-  String image;
 
-  // Constructeur
+  // ! Constructeur
   Entree({
+    this.id,
     required this.nom,
     required this.prenom,
     required this.departement,
-    this.image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3HdBqVDU45zUIDYvJbH1QE2kosJ0VrH0KEXee3n33PnskjPbyvDAUWYrChTGjCXHA2cc&usqp=CAU",
+    this.image = "http://docketu.iutnc.univ-lorraine.fr:54002/img/person.png",
+    this.fonction,
+    this.numeroBureau,
+    this.numeroTel1,
+    this.numeroTel2,
+    this.email,
   });
 
-  // Création d'une Entree à partir d'un objet JSON
+  // ! Création d'une Entree à partir d'un objet JSON
   factory Entree.fromJson(Map<String, dynamic> json) {
+    String url = json['links']['self']['href'] as String;
+    String id = url.split('/').last;
+    
     return Entree(
-      nom: json['nom'] as String,
-      prenom: json['prenom'] as String,
-      departement: List<String>.from(json['departement'] as List),
+      id: id,
+      nom: json['entree']['nom'] as String,
+      prenom: json['entree']['prenom'] as String,
+      departement: List<String>.from(json['entree']['departement'] as List),
     );
   }
+
+  // ! Création d'une Entree à partir d'un objet JSON détaillé
+  factory Entree.fromJsonDetails(Map<String, dynamic> json) {
+    return Entree(
+      id: json['entree']['id'] as String,
+      nom: json['entree']['nom'] as String,
+      prenom: json['entree']['prenom'] as String,
+      departement: List<String>.from(json['entree']['departement'] as List),
+      fonction: json['entree']['fonction'] as String,
+      numeroBureau: json['entree']['numeroBureau'] as int,
+      numeroTel1: json['entree']['numeroTel1'] as String,
+      numeroTel2: json['entree']['numeroTel2'],
+      email: json['entree']['email'] as String,
+      image:
+          "http://docketu.iutnc.univ-lorraine.fr:54002${json['links']['image']}",
+    );
+  }
+
 }

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:phone_book_app/models/entree.dart';
+import 'package:phone_book_app/screens/api_services.dart';
 import 'package:phone_book_app/screens/entree_preview.dart';
 
 class EntreeMaster extends StatefulWidget {
@@ -32,7 +32,7 @@ class _EntreeMasterState extends State<EntreeMaster> {
   @override
   void initState() {
     super.initState();
-    entrees = _fetchEntrees();
+    entrees = ApiService().fetchEntrees();
   }
 
   @override
@@ -83,6 +83,8 @@ class _EntreeMasterState extends State<EntreeMaster> {
           ),
           // ! Menu déroulant pour filtrer par département
           PopupMenuButton<String>(
+            color: Colors.white,
+            initialValue: dropdownvalue,
             icon: const Icon(
               Icons.filter_list,
               color: Color.fromRGBO(3, 148, 222, 1),
@@ -92,6 +94,11 @@ class _EntreeMasterState extends State<EntreeMaster> {
                 dropdownvalue = value;
               });
             },
+            popUpAnimationStyle: AnimationStyle(
+              curve: Curves.easeInOut,
+              duration: const Duration(milliseconds: 500),
+            ),
+            
             itemBuilder: (BuildContext context) {
               return items.map<PopupMenuItem<String>>((String value) {
                 return PopupMenuItem<String>(
@@ -129,7 +136,7 @@ class _EntreeMasterState extends State<EntreeMaster> {
                 isAscending ? a.nom.compareTo(b.nom) : b.nom.compareTo(a.nom));
 
             // ! Affichage des entrées
-            return Expanded(
+            return SizedBox(
               child: ListView.builder(
                 itemCount: filteredEntrees.length,
                 itemBuilder: (context, index) {
@@ -156,7 +163,7 @@ class _EntreeMasterState extends State<EntreeMaster> {
       Map<String, dynamic> json = jsonDecode(response.body);
       List<dynamic> entreesJson = json['entrees'];
       return entreesJson.map<Entree>((json) {
-        return Entree.fromJson(json['entree'] as Map<String, dynamic>);
+        return Entree.fromJson(json);
       }).toList();
     } else {
       throw Exception('Impossible de récupérer les entrées');
