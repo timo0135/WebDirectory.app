@@ -43,7 +43,7 @@ class _EntreePreviewState extends State<EntreePreview> {
                   color: Color.fromRGBO(3, 148, 222, 1),
                 ),
                 onPressed: () {
-                  _sendEmail(widget.entree.email!);
+                  widget.entree.sendEmail(widget.entree.email!);
                 },
               ),
               IconButton(
@@ -52,7 +52,7 @@ class _EntreePreviewState extends State<EntreePreview> {
                   color: Color.fromRGBO(3, 148, 222, 1),
                 ),
                 onPressed: () {
-                  _callNumber(widget.entree.numeroTel1!);
+                  widget.entree.callNumber(widget.entree.numeroTel1!);
                 },
               ),
             ],
@@ -68,22 +68,5 @@ class _EntreePreviewState extends State<EntreePreview> {
       ),
     );
   }
-
-  // ! Fonctions pour lancer un appel 
-  Future<void> _callNumber(String num) async {
-    final Uri tel = Uri.parse("tel:$num");
-
-    await launchUrl(tel)
-        ? ''
-        : throw Exception('Impossible de lancer l\'appel $tel');
-  }
-
-  // ! Fonctions pour envoyer un email 
-  Future<void> _sendEmail(String email) async {
-    final Uri mail = Uri.parse("mailto:$email");
-
-    await launchUrl(mail)
-        ? ''
-        : throw Exception('Impossible de lancer l\'email $mail');
-  }
+  
 }

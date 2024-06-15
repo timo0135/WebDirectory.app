@@ -1,3 +1,5 @@
+import 'package:url_launcher/url_launcher.dart';
+
 class Entree {
   // ! Attributs
   String nom, prenom, image;
@@ -47,6 +49,24 @@ class Entree {
       image:
           "http://docketu.iutnc.univ-lorraine.fr:54002${json['links']['image']}",
     );
+  }
+
+   // ! Fonctions pour lancer un appel 
+  Future<void> callNumber(String num) async {
+    final Uri tel = Uri.parse("tel:$num");
+
+    await launchUrl(tel)
+        ? ''
+        : throw Exception('Impossible de lancer l\'appel $tel');
+  }
+
+  // ! Fonctions pour envoyer un email 
+  Future<void> sendEmail(String email) async {
+    final Uri mail = Uri.parse("mailto:$email");
+
+    await launchUrl(mail)
+        ? ''
+        : throw Exception('Impossible de lancer l\'email $mail');
   }
 
 }

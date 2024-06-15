@@ -48,6 +48,7 @@ class _EntreeDetailsState extends State<EntreeDetails> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // ! Photo de l'entrée
                   Center(
                     child: CircleAvatar(
                       radius: 50,
@@ -56,6 +57,7 @@ class _EntreeDetailsState extends State<EntreeDetails> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  // ! Nom et prénom de l'entrée
                   Center(
                     child: Text(
                       '${entree.nom} ${entree.prenom}',
@@ -65,7 +67,30 @@ class _EntreeDetailsState extends State<EntreeDetails> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  // ! Boutons pour envoyer un email et appeler
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          color: Color.fromRGBO(3, 148, 222, 1),
+                          Icons.phone,
+                        ),
+                        onPressed: () {
+                          entree.callNumber(entree.numeroTel1!);
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          color: Color.fromRGBO(3, 148, 222, 1),
+                          Icons.email,
+                        ),
+                        onPressed: () {
+                          entree.sendEmail(entree.email!);
+                        },
+                      ),
+                    ],
+                  ),
                   _buildInfoTile(
                       'Fonction', entree.fonction ?? 'Non renseigné'),
                   _buildInfoTile('Département', entree.departement.join(', ')),
