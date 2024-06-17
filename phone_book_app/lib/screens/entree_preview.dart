@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:phone_book_app/models/entree.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:phone_book_app/screens/entree_details.dart';
 
 class EntreePreview extends StatefulWidget {
