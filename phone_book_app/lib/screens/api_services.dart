@@ -41,8 +41,14 @@ class ApiService {
 
   // ! Fonction de recherche d'entrées
   Future<List<Entree>> searchEntrees(String query, String department) async {
+     String url;
+    if (department == 'Tous') {
+      url = '$baseUrl/entrees/search?q=$query';
+    } else {
+      url = '$baseUrl/services/2/entrees/search?q=$query';
+    }
 
-    final response = await http.get(Uri.parse('$baseUrl/entrees/search?q=$query'));
+    final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       Map<String, dynamic> json = jsonDecode(response.body);
@@ -55,12 +61,7 @@ class ApiService {
         }).toList(),
       );
 
-      if (department != 'Tous') {
-        entrees.removeWhere((entree) => !entree.departement.contains(department));
-      }
-
       return entrees;
-      
     } else {
       throw Exception('Impossible de rechercher les entrées');
     }
