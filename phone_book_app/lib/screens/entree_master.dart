@@ -40,6 +40,7 @@ class _EntreeMasterState extends State<EntreeMaster> {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(239, 243, 247, 1),
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(
@@ -62,7 +63,13 @@ class _EntreeMasterState extends State<EntreeMaster> {
                   border: InputBorder.none,
                 ),
                 onChanged: (value) {
-                  setState(() {});
+                  setState(() {
+                    if (value.isNotEmpty) {
+                      entrees = ApiService().searchEntrees(value, dropdownvalue!);
+                    } else {
+                      entrees = ApiService().fetchEntrees();
+                    }
+                  });
                 },
               ),
         actions: <Widget>[
@@ -92,13 +99,17 @@ class _EntreeMasterState extends State<EntreeMaster> {
             onSelected: (String value) {
               setState(() {
                 dropdownvalue = value;
+                if (dropdownvalue == 'Tous') {
+                  entrees = ApiService().fetchEntrees();
+                } else {
+                  entrees = ApiService().filterEntrees(items.indexOf(dropdownvalue!));
+                }
               });
             },
             popUpAnimationStyle: AnimationStyle(
               curve: Curves.easeInOut,
               duration: const Duration(milliseconds: 500),
             ),
-            
             itemBuilder: (BuildContext context) {
               return items.map<PopupMenuItem<String>>((String value) {
                 return PopupMenuItem<String>(
@@ -116,6 +127,7 @@ class _EntreeMasterState extends State<EntreeMaster> {
             ),
             onPressed: () {
               setState(() {
+                entrees = ApiService().sortEntrees(isAscending, items.indexOf(dropdownvalue!));
                 isAscending = !isAscending;
               });
             },
@@ -126,21 +138,12 @@ class _EntreeMasterState extends State<EntreeMaster> {
         future: entrees,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            // ! Filtrer des entrées par département et par recherche
-            List<Entree> filteredEntrees = _filterEntrees(snapshot.data!);
-            filteredEntrees =
-                _searchEntrees(filteredEntrees, searchController.text);
-
-            // ! Tri des entrées par nom
-            filteredEntrees.sort((a, b) =>
-                isAscending ? a.nom.compareTo(b.nom) : b.nom.compareTo(a.nom));
-
             // ! Affichage des entrées
             return SizedBox(
               child: ListView.builder(
-                itemCount: filteredEntrees.length,
+                itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  final entree = filteredEntrees[index];
+                  final entree = snapshot.data![index];
                   return EntreePreview(entree: entree);
                 },
               ),
@@ -152,44 +155,5 @@ class _EntreeMasterState extends State<EntreeMaster> {
         },
       ),
     );
-  }
-
-  // ! Récupération des entrées depuis l'API
-  Future<List<Entree>> _fetchEntrees() async {
-    final response = await http.get(
-        Uri.parse('http://docketu.iutnc.univ-lorraine.fr:54002/api/entrees'));
-
-    if (response.statusCode == 200) {
-      Map<String, dynamic> json = jsonDecode(response.body);
-      List<dynamic> entreesJson = json['entrees'];
-      return entreesJson.map<Entree>((json) {
-        return Entree.fromJson(json);
-      }).toList();
-    } else {
-      throw Exception('Impossible de récupérer les entrées');
-    }
-  }
-
-  // ! Filtrer des entrées par département
-  List<Entree> _filterEntrees(List<Entree> entrees) {
-    if (dropdownvalue == 'Tous') {
-      return entrees;
-    } else {
-      return entrees
-          .where((entree) => entree.departement.contains(dropdownvalue))
-          .toList();
-    }
-  }
-
-  // ! Filtrer des entrées par recherche
-  List<Entree> _searchEntrees(List<Entree> entrees, String query) {
-    if (query.isEmpty) {
-      return entrees;
-    } else {
-      return entrees.where((entree) {
-        return entree.nom.toLowerCase().contains(query.toLowerCase()) ||
-            entree.prenom.toLowerCase().contains(query.toLowerCase());
-      }).toList();
-    }
   }
 }

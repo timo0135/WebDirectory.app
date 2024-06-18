@@ -16,18 +16,16 @@ class _PhoneBookAppState extends State<PhoneBookApp> {
       title: 'Phone Book App',
       home: Scaffold(
         appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
           backgroundColor: const Color.fromRGBO(3, 148, 222, 1),
           title: const Text(
             'Phone Book App',
             style: TextStyle(color: Colors.white, fontSize: 18),
           ),
-          
-         
         ),
         body: const EntreeMaster(),
       ),
       debugShowCheckedModeBanner: false,
     );
   }
-  
 }
