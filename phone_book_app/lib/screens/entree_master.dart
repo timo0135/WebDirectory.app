@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:phone_book_app/models/entree.dart';
 import 'package:phone_book_app/screens/api_services.dart';
 import 'package:phone_book_app/screens/entree_preview.dart';
@@ -65,9 +63,14 @@ class _EntreeMasterState extends State<EntreeMaster> {
                 onChanged: (value) {
                   setState(() {
                     if (value.isNotEmpty) {
-                      entrees = ApiService().searchEntrees(value, dropdownvalue!);
+                      entrees =
+                          ApiService().searchEntrees(value, dropdownvalue!);
                     } else {
                       entrees = ApiService().fetchEntrees();
+                      if (dropdownvalue != 'Tous') {
+                        entrees = ApiService()
+                            .filterEntrees(items.indexOf(dropdownvalue!));
+                      }
                     }
                   });
                 },
@@ -102,7 +105,8 @@ class _EntreeMasterState extends State<EntreeMaster> {
                 if (dropdownvalue == 'Tous') {
                   entrees = ApiService().fetchEntrees();
                 } else {
-                  entrees = ApiService().filterEntrees(items.indexOf(dropdownvalue!));
+                  entrees =
+                      ApiService().filterEntrees(items.indexOf(dropdownvalue!));
                 }
               });
             },
@@ -127,8 +131,9 @@ class _EntreeMasterState extends State<EntreeMaster> {
             ),
             onPressed: () {
               setState(() {
-                entrees = ApiService().sortEntrees(isAscending, items.indexOf(dropdownvalue!));
                 isAscending = !isAscending;
+                entrees = ApiService()
+                    .sortEntrees(isAscending, items.indexOf(dropdownvalue!));
               });
             },
           ),

@@ -8,7 +8,7 @@ class ApiService {
 
   // ! Récupération des entrées
   Future<List<Entree>> fetchEntrees() async {
-    final response = await http.get(Uri.parse('$baseUrl/entrees'));
+    final response = await http.get(Uri.parse('$baseUrl/entrees?order=nom-asc'));
 
     if (response.statusCode == 200) {
       Map<String, dynamic> json = jsonDecode(response.body);
