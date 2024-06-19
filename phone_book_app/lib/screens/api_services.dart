@@ -4,7 +4,8 @@ import 'package:phone_book_app/models/entree.dart';
 
 class ApiService {
   // * URL de base pour les requêtes
-  static const String baseUrl = 'http://docketu.iutnc.univ-lorraine.fr:54002/api';
+  static const String baseUrl =
+      'http://docketu.iutnc.univ-lorraine.fr:54002/api';
 
   // ! Récupération des entrées
   Future<List<Entree>> fetchEntrees() async {
@@ -41,7 +42,7 @@ class ApiService {
 
   // ! Fonction de recherche d'entrées
   Future<List<Entree>> searchEntrees(String query, String department) async {
-     String url;
+    String url;
     if (department == 'Tous') {
       url = '$baseUrl/entrees/search?q=$query';
     } else {
@@ -73,7 +74,8 @@ class ApiService {
     if (idDepartment == 0) {
       url = '$baseUrl/entrees?sort=nom-${isAscending ? 'asc' : 'desc'}';
     } else {
-      url = '$baseUrl/services/$idDepartment/entrees?sort=nom-${isAscending ? 'asc' : 'desc'}';
+      url =
+          '$baseUrl/services/$idDepartment/entrees?sort=nom-${isAscending ? 'asc' : 'desc'}';
     }
 
     final response = await http.get(Uri.parse(url));
@@ -97,7 +99,8 @@ class ApiService {
 
   // ! Fonction de filtrage des entrées par département
   Future<List<Entree>> filterEntrees(int idDepartment) async {
-    final response = await http.get(Uri.parse('$baseUrl/services/$idDepartment/entrees'));
+    final response =
+        await http.get(Uri.parse('$baseUrl/services/$idDepartment/entrees'));
 
     if (response.statusCode == 200) {
       Map<String, dynamic> json = jsonDecode(response.body);

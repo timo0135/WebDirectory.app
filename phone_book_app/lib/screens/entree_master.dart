@@ -40,13 +40,6 @@ class _EntreeMasterState extends State<EntreeMaster> {
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.menu,
-            color: Color.fromRGBO(3, 148, 222, 1),
-          ),
-          onPressed: () {},
-        ),
         title: !isSearching
             ? const Text(
                 '',
