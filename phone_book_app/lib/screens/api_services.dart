@@ -8,7 +8,7 @@ class ApiService {
 
   // ! Récupération des entrées
   Future<List<Entree>> fetchEntrees() async {
-    final response = await http.get(Uri.parse('$baseUrl/entrees?order=nom-asc'));
+    final response = await http.get(Uri.parse('$baseUrl/entrees?sort=nom-asc'));
 
     if (response.statusCode == 200) {
       Map<String, dynamic> json = jsonDecode(response.body);
@@ -71,9 +71,9 @@ class ApiService {
   Future<List<Entree>> sortEntrees(bool isAscending, int idDepartment) async {
     String url;
     if (idDepartment == 0) {
-      url = '$baseUrl/entrees?order=nom-${isAscending ? 'asc' : 'desc'}';
+      url = '$baseUrl/entrees?sort=nom-${isAscending ? 'asc' : 'desc'}';
     } else {
-      url = '$baseUrl/services/$idDepartment/entrees?order=nom-${isAscending ? 'asc' : 'desc'}';
+      url = '$baseUrl/services/$idDepartment/entrees?sort=nom-${isAscending ? 'asc' : 'desc'}';
     }
 
     final response = await http.get(Uri.parse(url));
